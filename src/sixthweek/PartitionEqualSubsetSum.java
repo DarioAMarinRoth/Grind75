@@ -9,14 +9,9 @@ public class PartitionEqualSubsetSum {
 
     public static boolean canPartition(int[] nums) {
         int totalSum = 0;
-        int reverseTotalSum = 0;
 
-        Arrays.sort(nums);
-        int[] cumulativeSum = new int[nums.length];
-
-        for (int i = 0; i < nums.length; i++) {
-            totalSum += nums[i];
-            cumulativeSum[i] = totalSum;
+        for (int num : nums) {
+            totalSum += num;
         }
 
         if (totalSum % 2 != 0) {
@@ -25,20 +20,21 @@ public class PartitionEqualSubsetSum {
 
         int target = totalSum / 2;
 
-        for (int i = 0; i < cumulativeSum.length; i++) {
-            if (cumulativeSum[i] == target) {
-                return true;
-            }
-            for (int j = 0; j < cumulativeSum.length; j++) {
-                if (i == j) {
-                    continue;
-                }
-                if (cumulativeSum[i] - cumulativeSum[j] == target) {
-                    return true;
+
+        Arrays.sort(nums);
+        boolean sums[] = new boolean[target + 1];
+        sums[0] = true;
+        for (int num : nums) {
+            for (int i = target; i >= 0; i++) {
+                if (sums[i]) {
+                    if (i + num == target) {
+                        return true;
+                    } if (i + num < target) {
+                        sums[i + num] = true;
+                    }
                 }
             }
         }
-
         return false;
     }
 }
